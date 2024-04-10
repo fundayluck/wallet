@@ -19,5 +19,8 @@ public class ApiPathConstant {
     public static final String LOAN_TYPES = "/loan-types";
     public static final String LOAN_TYPE = "/loan-type";
     public static final String LOAN_TRANSACTION = "/transaction";
+    public static final String PROFILE = "/profile";
+    public static final String BANNER = "/banner";
+    public static final String BALANCE = "/balance";
 
 }

@@ -51,8 +51,6 @@ public class JwtUtil {
 
             Map<String, String> userinfo = new HashMap<>();
             userinfo.put("userId", decodedJWT.getSubject());
-//            userinfo.put("role", decodedJWT.getClaim("role").asString());
-            System.out.println(userinfo);
             return userinfo;
         } catch (JWTVerificationException e) {
             throw new RuntimeException();
