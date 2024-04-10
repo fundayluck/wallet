@@ -23,10 +23,15 @@ public class AuthController {
 
     @PostMapping(ApiPathConstant.REGISTER)
     public ResponseEntity<CustomResponse<?>> Register(@RequestBody RegisterRequest registerRequest) {
-        RegisterResponse registerResponse = authService.register(registerRequest);
-        System.out.println(registerResponse + "response");
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new CustomResponse<>(200,"Success Created User!", registerResponse));
+        try {
+            RegisterResponse registerResponse = authService.register(registerRequest);
+            System.out.println(registerResponse + "response");
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new CustomResponse<>(200,"Success Created User!", registerResponse));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new CustomResponse<>(HttpStatus.BAD_REQUEST.value(), e.getMessage(), null));
+        }
     }
 
     @PostMapping(ApiPathConstant.LOGIN)

@@ -31,6 +31,18 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public RegisterResponse register(RegisterRequest registerRequest) {
         try {
+            String emailRegex = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$";
+            if (!registerRequest.getEmail().matches(emailRegex)) {
+                throw new RuntimeException("Invalid Email format!");
+            }
+            if(
+                    registerRequest.getEmail() == "" ||
+                    registerRequest.getFirstName() == "" ||
+                    registerRequest.getLastName() == "" ||
+                    registerRequest.getPassword() == ""
+            ) {
+                throw new RuntimeException("fill all parameters!");
+            }
             User user = User.builder()
                     .email(registerRequest.getEmail())
                     .password(passwordEncoder.encode(registerRequest.getPassword()))
@@ -43,7 +55,7 @@ public class AuthServiceImpl implements AuthService {
                     .email(user.getEmail())
                     .build();
         }catch (DataIntegrityViolationException e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT,"User Already Exist!");
+            throw new RuntimeException("User Already Exist!");
         }
     }
 
