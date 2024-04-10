@@ -2,6 +2,7 @@ package com.sims.wallet.service.impl;
 
 import com.sims.wallet.model.entity.AppUser;
 import com.sims.wallet.model.entity.User;
+import com.sims.wallet.model.response.GetBalances;
 import com.sims.wallet.model.response.GetUser;
 import com.sims.wallet.model.response.GetUserById;
 import com.sims.wallet.repository.UserRepository;
@@ -13,7 +14,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,6 +64,19 @@ public class UserServiceImpl implements UserService {
             return getUser;
         } else {
             return null;
+        }
+    }
+
+    @Override
+    public Double getBalance(Authentication authentication) {
+        Optional<User> user = repository.findByEmail(authentication.getName());
+        if (user.isPresent()) {
+            GetBalances getBalances = GetBalances.builder()
+                    .balance(user.get().getBalance())
+                    .build();
+            return getBalances.getBalance();
+        } else {
+            throw new RuntimeException("error");
         }
     }
 

@@ -3,6 +3,7 @@ package com.sims.wallet.controller;
 import com.sims.wallet.model.entity.User;
 import com.sims.wallet.model.request.RegisterRequest;
 import com.sims.wallet.model.response.CustomResponse;
+import com.sims.wallet.model.response.GetBalances;
 import com.sims.wallet.model.response.GetUser;
 import com.sims.wallet.model.response.RegisterResponse;
 import com.sims.wallet.service.UserService;
@@ -31,9 +32,9 @@ public class UserController {
                 .body(new CustomResponse<>(200,"Success get balance", user));
     }
     @GetMapping(ApiPathConstant.BALANCE)
-    public ResponseEntity<CustomResponse<?>> getBalance() {
-        System.out.println("afan");
+    public ResponseEntity<CustomResponse<?>> getBalance(Authentication authentication) {
+        Double getBalances = userService.getBalance(authentication);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new CustomResponse<>(200,"Success get balance", 1000000));
+                .body(new CustomResponse<>(200,"Success get balance", getBalances));
     }
 }

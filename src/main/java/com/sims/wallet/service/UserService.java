@@ -14,4 +14,5 @@ public interface UserService extends UserDetailsService {
     AppUser loadUserByUserId(String id);
     GetUserById getUserById(String id);
     GetUser getUser(Authentication authentication);
+    Double getBalance(Authentication authentication);
 }
