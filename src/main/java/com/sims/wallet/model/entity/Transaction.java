@@ -28,6 +28,7 @@ public class Transaction {
     private String description;
     private Double total_amount;
     private Date created_on;
+    @Enumerated(EnumType.STRING)
     private StatusPayment statusPayment;
     @ManyToOne
     @JoinColumn(name = "user_id")
