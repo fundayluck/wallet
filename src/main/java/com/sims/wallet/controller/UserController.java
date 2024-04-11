@@ -2,6 +2,7 @@ package com.sims.wallet.controller;
 
 import com.sims.wallet.model.entity.User;
 import com.sims.wallet.model.request.RegisterRequest;
+import com.sims.wallet.model.request.UpdateUserRequest;
 import com.sims.wallet.model.response.CustomResponse;
 import com.sims.wallet.model.response.GetBalances;
 import com.sims.wallet.model.response.GetUser;
@@ -36,5 +37,20 @@ public class UserController {
         GetBalances getBalances = userService.getBalance(authentication);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CustomResponse<>(200,"Success get balance", getBalances));
+    }
+
+    @PutMapping(ApiPathConstant.PROFILE + ApiPathConstant.UPDATE)
+    public ResponseEntity<CustomResponse<?>> updateUser(
+            @RequestBody
+            UpdateUserRequest updateUserRequest,
+             Authentication authentication
+    ) {
+        try {
+            userService.updateUser(updateUserRequest, authentication);
+            return ResponseEntity.status(HttpStatus.OK).body(new CustomResponse<>(200, "success", null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CustomResponse<>(400, e.getMessage(), null));
+        }
+
     }
 }

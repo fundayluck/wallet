@@ -2,6 +2,7 @@ package com.sims.wallet.service;
 
 import com.sims.wallet.model.entity.AppUser;
 import com.sims.wallet.model.entity.User;
+import com.sims.wallet.model.request.UpdateUserRequest;
 import com.sims.wallet.model.response.GetBalances;
 import com.sims.wallet.model.response.GetUser;
 import com.sims.wallet.model.response.GetUserById;
@@ -16,4 +17,5 @@ public interface UserService extends UserDetailsService {
     GetUserById getUserById(String id);
     GetUser getUser(Authentication authentication);
     GetBalances getBalance(Authentication authentication);
+    User updateUser(UpdateUserRequest updateUserRequest,Authentication authentication);
 }

@@ -2,6 +2,7 @@ package com.sims.wallet.service.impl;
 
 import com.sims.wallet.model.entity.AppUser;
 import com.sims.wallet.model.entity.User;
+import com.sims.wallet.model.request.UpdateUserRequest;
 import com.sims.wallet.model.response.GetBalances;
 import com.sims.wallet.model.response.GetUser;
 import com.sims.wallet.model.response.GetUserById;
@@ -77,6 +78,26 @@ public class UserServiceImpl implements UserService {
             return getBalances;
         } else {
             throw new RuntimeException("error");
+        }
+    }
+
+    @Override
+    public User updateUser(UpdateUserRequest updateUserRequest, Authentication authentication) {
+        Optional<User> updateUser = repository.findByEmail(authentication.getName());
+        System.out.println(updateUser + "userUpdate");
+        if(updateUser.isPresent()) {
+            User user = User.builder()
+                    .id(updateUser.get().getId())
+                    .firstName(updateUserRequest.getFirstName())
+                    .lastName(updateUserRequest.getLastName())
+                    .email(updateUser.get().getEmail())
+                    .profilePicture(updateUser.get().getProfilePicture())
+                    .balance(updateUser.get().getBalance())
+                    .password(updateUser.get().getPassword())
+                    .build();
+            return repository.save(user);
+        } else {
+            throw new RuntimeException("something went wrong");
         }
     }
 
