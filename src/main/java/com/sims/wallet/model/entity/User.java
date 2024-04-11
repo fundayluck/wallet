@@ -22,7 +22,7 @@ public class User {
     private String firstName;
     private String lastName;
     private String profilePicture;
-    @Column(nullable = false, columnDefinition = "numeric default 0.0")
+    @Column(nullable = false)
     private Double balance;
 
 }

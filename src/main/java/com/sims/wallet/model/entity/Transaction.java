@@ -1,5 +1,6 @@
 package com.sims.wallet.model.entity;
 
+import com.sims.wallet.util.constant.StatusPayment;
 import com.sims.wallet.util.constant.TransactionType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -27,6 +28,7 @@ public class Transaction {
     private String description;
     private Double total_amount;
     private Date created_on;
+    private StatusPayment statusPayment;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

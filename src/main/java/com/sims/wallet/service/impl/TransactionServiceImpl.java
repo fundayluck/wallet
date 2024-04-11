@@ -9,6 +9,7 @@ import com.sims.wallet.repository.ServicesRepository;
 import com.sims.wallet.repository.TransactionRepository;
 import com.sims.wallet.repository.UserRepository;
 import com.sims.wallet.service.TransactionService;
+import com.sims.wallet.util.constant.StatusPayment;
 import com.sims.wallet.util.constant.TransactionType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -47,11 +48,18 @@ public class TransactionServiceImpl implements TransactionService {
                 user.setBalance(user.getBalance() - transaction.getTotal_amount());
             }
 
+            transaction.setStatusPayment(StatusPayment.SUCCESS);
             transaction.setUser(user);
             userRepository.save(user);
             return transactionRepository.save(transaction);
         } catch (Exception e) {
             e.printStackTrace();
+            Optional<User> findUserOptional = userRepository.findByEmail(authentication.getName()); 
+            User user = findUserOptional.get();
+
+            transaction.setStatusPayment(StatusPayment.FAILED);
+            transaction.setUser(user);
+            transactionRepository.save(transaction);
             throw new RuntimeException("Failed to create transaction");
         }
     }
