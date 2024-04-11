@@ -35,7 +35,8 @@ public class SecurityConfiguration {
     private static final String[] WHITE_LIST_URL = {
             "api/v1/auth/**",
             "/api/v1/banners/**",
-            "/api/v1/service/**"
+            "/api/v1/service/**",
+            "/api/v1/photo/**",
 //            "http://localhost:8080/api/v1/auth/login"
     };
 //    private static final String[] ADMIN_STAFF_ONLY = {

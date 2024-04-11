@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,6 +99,29 @@ public class UserServiceImpl implements UserService {
             return repository.save(user);
         } else {
             throw new RuntimeException("something went wrong");
+        }
+    }
+
+    @Override
+    public void updateUserImage(MultipartFile file, Authentication authentication) {
+        Optional<User> updateUser = repository.findByEmail(authentication.getName());
+        System.out.println(updateUser + "userUpdate");
+//        if(updateUser.getFirstName().equals(authentication.getName())) {
+//            updateUser.setProfilePicture("http://localhost:8080/api/v1/photo/" + file.getOriginalFilename());
+//        } else {
+//            throw new RuntimeException("something went wrong");
+//        }
+        if(updateUser.isPresent()) {
+            User user = User.builder()
+                    .id(updateUser.get().getId())
+                    .firstName(updateUser.get().getFirstName())
+                    .lastName(updateUser.get().getLastName())
+                    .email(updateUser.get().getEmail())
+                    .profilePicture("http://localhost:8080/api/v1/photo/" + file.getOriginalFilename())
+                    .balance(updateUser.get().getBalance())
+                    .password(updateUser.get().getPassword())
+                    .build();
+            repository.save(user);
         }
     }
 

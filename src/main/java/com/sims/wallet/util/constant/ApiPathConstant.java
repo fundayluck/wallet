@@ -11,5 +11,6 @@ public class ApiPathConstant {
     public static final String BALANCE = "/balance";
     public static final String SERVICES = "/services";
     public static final String UPDATE = "/update";
+    public static final String IMAGE = "/image";
 
 }

@@ -8,6 +8,7 @@ import com.sims.wallet.model.response.GetUser;
 import com.sims.wallet.model.response.GetUserById;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,4 +19,5 @@ public interface UserService extends UserDetailsService {
     GetUser getUser(Authentication authentication);
     GetBalances getBalance(Authentication authentication);
     User updateUser(UpdateUserRequest updateUserRequest,Authentication authentication);
+    void updateUserImage(MultipartFile file, Authentication authentication);
 }
