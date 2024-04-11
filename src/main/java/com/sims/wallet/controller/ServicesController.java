@@ -3,6 +3,7 @@ package com.sims.wallet.controller;
 import com.sims.wallet.model.entity.Services;
 import com.sims.wallet.model.entity.Transaction;
 import com.sims.wallet.model.request.PageResponseWrap;
+import com.sims.wallet.model.request.RequestPayment;
 import com.sims.wallet.model.request.RequestTopup;
 import com.sims.wallet.model.response.CustomResponse;
 import com.sims.wallet.service.ServicesService;
@@ -50,5 +51,22 @@ public class ServicesController {
         transactionService.doTopup(requestTopup,authentication);
 
         return ResponseEntity.status(HttpStatus.OK).body(new CustomResponse<>());
+    }
+
+    @PostMapping(ApiPathConstant.TRANSACTION)
+    public ResponseEntity<CustomResponse<?>> doPayment(
+            @RequestBody
+            RequestPayment requestPayment,
+            Authentication authentication
+    ) {
+        try {
+            System.out.println(requestPayment + " " + authentication.getName() + " result");
+            transactionService.doPayment(requestPayment, authentication);
+            return ResponseEntity.status(HttpStatus.OK).body(new CustomResponse<>(200, "Payment successful", null));
+        } catch (RuntimeException e) {
+            // Tangani kesalahan jika terjadi
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CustomResponse<>(400, e.getMessage(), null));
+        }
     }
 }

@@ -15,6 +15,7 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @Builder
+@ToString
 public class Transaction {
     @Id
     @GeneratedValue(generator = "uuid2")

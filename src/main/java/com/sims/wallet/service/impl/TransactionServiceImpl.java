@@ -1,9 +1,11 @@
 package com.sims.wallet.service.impl;
 
+import com.sims.wallet.model.entity.Services;
 import com.sims.wallet.model.entity.Transaction;
 import com.sims.wallet.model.entity.User;
 import com.sims.wallet.model.request.RequestPayment;
 import com.sims.wallet.model.request.RequestTopup;
+import com.sims.wallet.repository.ServicesRepository;
 import com.sims.wallet.repository.TransactionRepository;
 import com.sims.wallet.repository.UserRepository;
 import com.sims.wallet.service.TransactionService;
@@ -17,7 +19,6 @@ import org.springframework.stereotype.Service;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,23 +27,33 @@ import java.util.Optional;
 public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
     private final UserRepository userRepository;
+    private final ServicesRepository servicesRepository;
     @Override
     public Transaction createTransaction(Transaction transaction, Authentication authentication) {
-        System.out.println("save records transaction");
-        Optional<User> findUser = userRepository.findByEmail(authentication.getName());
-            User result = User.builder()
-                    .id(findUser.get().getId())
-                    .email(findUser.get().getEmail())
-                    .password(findUser.get().getPassword())
-                    .firstName(findUser.get().getFirstName())
-                    .lastName(findUser.get().getLastName())
-                    .profilePicture(findUser.get().getProfilePicture())
-                    .balance(findUser.get().getBalance() + transaction.getTotal_amount())
-                    .build();
-            transaction.setUser(result);
-            transactionRepository.save(transaction);
-            userRepository.saveAndFlush(result);
-        return transaction;
+        System.out.println("Saving transaction records");
+        try {
+            Optional<User> findUserOptional = userRepository.findByEmail(authentication.getName());
+            if (!findUserOptional.isPresent()) {
+                throw new RuntimeException("User not found");
+            }
+
+            User user = findUserOptional.get();
+            if (transaction.getTransaction_type() == TransactionType.TOPUP) {
+                user.setBalance(user.getBalance() + transaction.getTotal_amount());
+            } else if (transaction.getTransaction_type() == TransactionType.PAYMENT) {
+                if (user.getBalance() < transaction.getTotal_amount()) {
+                    throw new RuntimeException("Insufficient balance");
+                }
+                user.setBalance(user.getBalance() - transaction.getTotal_amount());
+            }
+
+            transaction.setUser(user);
+            userRepository.save(user);
+            return transactionRepository.save(transaction);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to create transaction");
+        }
     }
 
     @Override
@@ -77,7 +88,7 @@ public class TransactionServiceImpl implements TransactionService {
             createTransaction(transaction, authentication);
             System.out.println("do topup");
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
 
 
@@ -86,5 +97,20 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public void doPayment(RequestPayment requestPayment,Authentication authentication) {
         System.out.println("do payment");
+        try {
+
+
+            Services service = servicesRepository.findByServiceCode(requestPayment.getService_code());
+
+            Transaction transaction = Transaction.builder()
+                    .transaction_type(TransactionType.PAYMENT)
+                    .description(service.getService_name())
+                    .total_amount(service.getService_amount())
+                    .created_on(Date.valueOf(LocalDate.now()))
+                    .build();
+            createTransaction(transaction, authentication);
+        } catch (Exception e)  {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 }
