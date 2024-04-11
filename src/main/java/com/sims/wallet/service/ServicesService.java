@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface ServicesService {
     List<Services> getServices();
+    Services getServiceByCode(String code);
 }

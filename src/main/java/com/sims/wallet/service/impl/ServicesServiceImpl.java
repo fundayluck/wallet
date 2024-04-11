@@ -15,4 +15,9 @@ public class ServicesServiceImpl implements ServicesService {
     public List<Services> getServices() {
         return servicesRepository.findAll();
     }
+
+    @Override
+    public Services getServiceByCode(String code) {
+        return servicesRepository.findByServiceCode(code);
+    }
 }

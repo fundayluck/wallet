@@ -106,11 +106,7 @@ public class UserServiceImpl implements UserService {
     public void updateUserImage(MultipartFile file, Authentication authentication) {
         Optional<User> updateUser = repository.findByEmail(authentication.getName());
         System.out.println(updateUser + "userUpdate");
-//        if(updateUser.getFirstName().equals(authentication.getName())) {
-//            updateUser.setProfilePicture("http://localhost:8080/api/v1/photo/" + file.getOriginalFilename());
-//        } else {
-//            throw new RuntimeException("something went wrong");
-//        }
+
         if(updateUser.isPresent()) {
             User user = User.builder()
                     .id(updateUser.get().getId())
