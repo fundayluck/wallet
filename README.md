@@ -1,6 +1,6 @@
 ## Menambahkan Data Awal ke SQL Wallet App
 
-Sebelum menjalankan aplikasi, pastikan untuk menambahkan beberapa data awal ke database. Berikut adalah contoh instruksi SQL untuk menambahkan data ke tabel `t_banner` dan `t_services`:
+Sebelum menjalankan aplikasi, pastikan untuk menambahkan beberapa data awal ke database. Berikut adalah contoh instruksi SQL untuk menambahkan data ke tabel `t_banner` dan `t_transaction`:
 
 ### Menambahkan Data ke Tabel `t_banner`
 
