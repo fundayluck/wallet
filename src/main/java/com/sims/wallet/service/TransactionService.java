@@ -12,6 +12,6 @@ import java.util.List;
 public interface TransactionService {
     Transaction createTransaction(Transaction transaction, Authentication authentication);
     List<Transaction> getAllTransaction(Pageable pageable, Authentication authentication);
-    void doTopup(RequestTopup requestTopup);
-    void doPayment(RequestPayment requestPayment);
+    void doTopup(RequestTopup requestTopup,Authentication authentication);
+    void doPayment(RequestPayment requestPayment,Authentication authentication);
 }

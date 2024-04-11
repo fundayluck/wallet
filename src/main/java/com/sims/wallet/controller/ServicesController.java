@@ -25,15 +25,6 @@ public class ServicesController {
     private final ServicesService servicesService;
     private final TransactionService transactionService;
 
-    @GetMapping(ApiPathConstant.SERVICES)
-    public ResponseEntity<CustomResponse<?>> getBanner() {
-        System.out.println("get banner");
-        List<Services> banners = servicesService.getServices();
-
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new CustomResponse<>(200,"Success get services", banners));
-    }
 
     @GetMapping(ApiPathConstant.TRANSACTION + ApiPathConstant.HISTORY)
     public ResponseEntity<CustomResponse<?>> getAllTransaction(@RequestParam(name = "limit", defaultValue = "10") int limit, Authentication authentication) {
@@ -42,8 +33,8 @@ public class ServicesController {
 
         PageResponseWrap<Transaction> response = PageResponseWrap.<Transaction>builder()
                 .records(result)
-                .offset(0) // You can set the offset if needed
-                .limit(limit) // Convert the limit to string as required by PageResponseWrap
+                .offset(0)
+                .limit(limit)
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(new CustomResponse<>(200,"Success get transaction", response));
     }
@@ -56,6 +47,7 @@ public class ServicesController {
     ) {
         System.out.println(requestTopup.getTop_up_amount());
         System.out.println(authentication.getName());
+        transactionService.doTopup(requestTopup,authentication);
 
         return ResponseEntity.status(HttpStatus.OK).body(new CustomResponse<>());
     }
