@@ -32,8 +32,8 @@ public class UserController {
                 .body(new CustomResponse<>(200,"Success get balance", user));
     }
     @GetMapping(ApiPathConstant.BALANCE)
-    public ResponseEntity<CustomResponse<?>> getBalance(Authentication authentication) {
-        Double getBalances = userService.getBalance(authentication);
+    public ResponseEntity<CustomResponse<GetBalances>> getBalance(Authentication authentication) {
+        GetBalances getBalances = userService.getBalance(authentication);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CustomResponse<>(200,"Success get balance", getBalances));
     }

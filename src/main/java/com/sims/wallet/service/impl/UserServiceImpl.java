@@ -68,13 +68,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Double getBalance(Authentication authentication) {
+    public GetBalances getBalance(Authentication authentication) {
         Optional<User> user = repository.findByEmail(authentication.getName());
         if (user.isPresent()) {
             GetBalances getBalances = GetBalances.builder()
                     .balance(user.get().getBalance())
                     .build();
-            return getBalances.getBalance();
+            return getBalances;
         } else {
             throw new RuntimeException("error");
         }
