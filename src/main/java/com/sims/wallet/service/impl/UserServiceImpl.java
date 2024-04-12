@@ -25,7 +25,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private final UserRepository repository;
     @Value("${app.sims.jwt.picture_url_template}")
-    private final String picture_url_template;
+    private String picture_url_template;
     @Override
     public AppUser loadUserByUserId(String id) {
 
