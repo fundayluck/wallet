@@ -9,6 +9,7 @@ import com.sims.wallet.model.response.GetUserById;
 import com.sims.wallet.repository.UserRepository;
 import com.sims.wallet.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,6 +24,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository repository;
+    @Value("${app.sims.jwt.picture_url_template}")
+    private final String picture_url_template;
     @Override
     public AppUser loadUserByUserId(String id) {
 
@@ -113,7 +116,7 @@ public class UserServiceImpl implements UserService {
                     .firstName(updateUser.get().getFirstName())
                     .lastName(updateUser.get().getLastName())
                     .email(updateUser.get().getEmail())
-                    .profilePicture("http://localhost:8080/api/v1/photo/" + file.getOriginalFilename())
+                    .profilePicture(picture_url_template + file.getOriginalFilename())
                     .balance(updateUser.get().getBalance())
                     .password(updateUser.get().getPassword())
                     .build();
